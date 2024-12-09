@@ -82,7 +82,12 @@ public class OpenAIAPI {
             HttpResponse<String> response = HTTP_CLIENT
                 .send(request, BodyHandlers.ofString());
             HttpHeaders headers = response.headers(); // Check rate limit headers
-            System.out.println(headers);
+
+            String jsonBody = response.body();
+            OpenAIResults openAIResponse = GSON.fromJson(jsonBody, OpenAIResults.class);
+
+            String content = openAIResponse.choices[0].message.content;
+
             final int statusCode = response.statusCode();
             if (statusCode != 200) {
                 throw new IOException("Status code not 200:" + statusCode + response.body());

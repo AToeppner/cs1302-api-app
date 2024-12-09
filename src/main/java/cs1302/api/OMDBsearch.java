@@ -51,7 +51,6 @@ public class OMDBsearch {
             if (statusCode != 200) {
                 throw new IOException("Response status code not 200: " + statusCode);
             }
-            System.out.println(response.body().trim());
             return response.body().trim(); // Return the response body
         } catch (IllegalArgumentException | IOException | InterruptedException e) {
             throw new Exception("Error during search: " + e.getMessage(), e);
