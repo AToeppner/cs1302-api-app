@@ -12,9 +12,16 @@ Markdown is transformed into nice-looking HTML.
 > describe exactly what APIs you are using and how they are connected
 > in a meaningful way.
 
+    This app allows a user to search for movies using the Open movie database API.
+    The application take the user's search and searches the Open movie database API,
+    displays key information including the title, movie poster, and other various information,
+    the app then uses the movie's title as recieved by the open movie database and requests a
+    summaray of the movie from the Open Ai chatgpt bot. It the displays all of the information for
+    the user to see
+
 > **Also, include the GitHub `https` URL to your repository.**
 
-TODO WRITE / REPLACE
+https://github.com/AToeppner/cs1302-api-app
 
 ## Part 1.2: APIs
 
@@ -28,7 +35,7 @@ TODO WRITE / REPLACE
 ### API 1
 
 ```
-https://.../replace/me
+http://www.omdbapi.com/?t=Harry+Potter&y=2000
 ```
 
 > Replace this line with notes (if needed) or remove it (if not needed).
@@ -36,21 +43,34 @@ https://.../replace/me
 ### API 2
 
 ```
-https://../replace/me
+curl https://api.openai.com/v1/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer OPEN_API_KEY" \
+  -d '{
+    "model": "gpt-3.5-turbo",
+    "prompt": "Summarize the plot of the Harry Potter series in a few sentences.",
+    "max_tokens": 150,
+    "temperature": 0.7
+  }'
 ```
 
-> Replace this line with notes (if needed) or remove it (if not needed).
+>The chatgpt search is a lot more tedious and requires a lot of formatting to request it.
+    It is just chatgpt though so if you wanted to test it just type your answer into the website.
 
 ## Part 2: New
 
 > What is something new and/or exciting that you learned from working
 > on this project?
 
-TODO WRITE / REPLACE
+This is probably the biggest project Ive ever worked on from scratch. I will say it has shown me that I am
+    interested in cs because even if I was spending hours trying to fix something I could pay attention and stay
+    interested in the the project the whole time.
 
 ## Part 3: Retrospect
 
 > If you could start the project over from scratch, what do
 > you think might do differently and why?
 
-TODO WRITE / REPLACE
+Definitely more planning, understanding of basic components/ how the app is going to work overall.
+    I would have spent a lot less time if I knew exaclty what I wanted to achieve rather than trying
+    to do everything all at once. Also I dont like javafx.

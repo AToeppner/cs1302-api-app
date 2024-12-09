@@ -26,8 +26,8 @@ import javafx.stage.Stage;
 
 /**
  * This application allows users to access summaries for Movies. This program uses the
- * OMDb API to search for movies. Using the output from this API, this program then uses
- * OpenAI's API to generate a summary of the movie with ChatGPT 3.5.
+ * Open Movie Database API to search for movies. Using the output from this API,
+ * this program then uses OpenAI's API to generate a summary of the movie with ChatGPT 3.5.
  */
 public class ApiApp extends Application {
     Stage stage;
@@ -43,10 +43,20 @@ public class ApiApp extends Application {
     StackPane centeredBox;
     HBox resultLayout;
     HBox textLayer;
+    HBox movInfo;
     HBox[] results;
     ImageView[] imageViews;
     OMDBresults res;
-
+    String movTitle;
+    String movDirector;
+    String movYear;
+    String movRated;
+    String movReleased;
+    String movRuntime;
+    String movGenre;
+    String movAwards;
+    String movActors;
+    String movImdbRating;
 
     /**
      * Constructs an {@code ApiApp} object. This default (i.e., no argument)
@@ -66,6 +76,8 @@ public class ApiApp extends Application {
         creditLayer.setAlignment(Pos.CENTER_LEFT);
         creditLayer.setPadding(new Insets(2, 2, 2, 2));
         resultLayout = new HBox(16);
+        movInfo = new HBox(8);
+        movInfo.setAlignment(Pos.CENTER_RIGHT);
         textLayer = new HBox(16);
         textLayer.setAlignment(Pos.CENTER_LEFT);
         results = new HBox[5];
@@ -83,6 +95,7 @@ public class ApiApp extends Application {
     public void init() {
         // Setup Scene
         root.getChildren().addAll(searchLayer, statusLayer, resultLayer, creditLayer, textLayer);
+        root.getChildren().add(movInfo);
         searchLayer.getChildren().addAll(searchBox, searchButton);
         statusLayer.getChildren().addAll(statusText);
         resultLayer.setContent(resultLayout);
@@ -105,8 +118,7 @@ public class ApiApp extends Application {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        scene = new Scene(root, 620, 560);
-        // Setup Stage
+        scene = new Scene(root, 620, 500);
         stage.setTitle("TL;DR");
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> Platform.exit());
@@ -118,7 +130,7 @@ public class ApiApp extends Application {
 
     /**
      * Takes the inputted {@code query} and searches for results on the
-     * OMDB Search API.
+     * Open movie Database Search API.
      *
      * @param query the query string to search
      */
@@ -130,13 +142,59 @@ public class ApiApp extends Application {
             if (this.res.title != null) {
                 runNow(() -> displayCovers());
                 detailInfo(this.res.title);
+                movTitle = this.res.title;
+                if (this.res.director == null) {
+                    movDirector = "N/a";
+                } else {
+                    movDirector = this.res.director;
+                }
+                if (this.res.year == null) {
+                    movYear = "N/a";
+                } else {
+                    movYear = this.res.year;
+                }
+                if (this.res.rated == null) {
+                    movRated = "N/A";
+                } else {
+                    movRated = this.res.rated;
+                }
+                if (this.res.released == null) {
+                    movReleased = "N/A";
+                } else {
+                    movReleased = this.res.released;
+                }
+                if (this.res.runtime == null) {
+                    movRuntime = "N/A";
+                } else {
+                    movRuntime = this.res.runtime;
+                }
+                if (this.res.genre == null) {
+                    movGenre = "N/A";
+                } else {
+                    movGenre = this.res.genre;
+                }
+                if (this.res.awards == null) {
+                    movAwards = "N/A";
+                } else {
+                    movAwards = this.res.awards;
+                }
+                if (this.res.actors == null) {
+                    movActors = "N/A";
+                } else {
+                    movActors = this.res.actors;
+                }
+                if (this.res.imdbRating == null) {
+                    movImdbRating = "N/A";
+                } else {
+                    movImdbRating = this.res.imdbRating;
+                }
             } else {
                 throw new Exception("No movie found with that title");
             }
         } catch (Exception e) {
             alertError(e);
         }
-    } // searchBooks
+    } // searchMovies
 
     /**
      * Displays detailed information about the Movie including a ChatGPT summary of the movie
@@ -183,27 +241,42 @@ public class ApiApp extends Application {
     }
 
     /**
-     * Updates images of results book covers with the downloaded images.
+     * Updates the screen with the movie poster and information about the movie.
      */
 
     public void displayCovers() {
         String posterUrl = this.res.poster;
         try {
-            if (posterUrl == null || posterUrl.isEmpty()) {
-                throw new Exception("No poster found for the movie" );
-            }
             if (posterUrl != null && !posterUrl.isEmpty()) {
                 Runnable updateUI = () -> {
                     this.statusText.setText("Results Found! Downloading cover image");
                     Image posterImage = new Image(posterUrl);
                     ImageView imageView = new ImageView(posterImage);
                     imageView.setFitWidth(200);
-                    imageView.setFitHeight(270);
+                    imageView.setFitHeight(275);
                     StackPane centeredBox = new StackPane(imageView);
                     centeredBox.setStyle("-fx-background-color: lightgray;");
                     centeredBox.setPadding(new Insets(5));
+                    TextArea movieDetails = new TextArea();
+                    movieDetails.setWrapText(true);
+                    movieDetails.setEditable(false);
+                    movieDetails.setPrefColumnCount(20);
+                    movieDetails.setPrefRowCount(10);
+                    movieDetails.setText(
+                        "Title: " + movTitle + "\n" +
+                        "Director: " + movDirector + "\n" +
+                        "Year Released: " + movYear + "\n" +
+                        "Rated: " + movRated + "\n" +
+                        "Released: " + movReleased + "\n" +
+                        "Runtime: " + movRuntime + "\n" +
+                        "Genre: " + movGenre + "\n" +
+                        "Actors: " + movActors + "\n" +
+                        "Awards: " + movAwards + "\n" +
+                        "IMDb Rating: " + movImdbRating);
+                    movInfo.getChildren().clear();
+                    movInfo.getChildren().add(movieDetails);
                     this.resultLayout.getChildren().clear();
-                    this.resultLayout.getChildren().add(centeredBox);
+                    this.resultLayout.getChildren().addAll(centeredBox, movInfo);
                     this.statusText.setText("Results Found!");
                     this.searchButton.setDisable(false);
                 };

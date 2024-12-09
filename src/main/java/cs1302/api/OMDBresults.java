@@ -7,17 +7,35 @@ import com.google.gson.annotations.SerializedName;
  */
 public class OMDBresults {
     @SerializedName("Title")
-    public String title;
+    String title;
 
     @SerializedName("Year")
-    public String year;
+    String year;
 
     @SerializedName("Poster")
-    public String poster;
+    String poster;
 
-    @SerializedName("Plot")
-    public String plot;
+    @SerializedName("Rated")
+    String rated;
+
+    @SerializedName("Released")
+    String released;
+
+    @SerializedName("Runtime")
+    String runtime;
+
+    @SerializedName("Genre")
+    String genre;
+
+    @SerializedName("Awards")
+    String awards;
+
+    @SerializedName("Actors")
+    String actors;
+
+    @SerializedName("imdbRating")
+    String imdbRating;
 
     @SerializedName("Director")
-    public String director;
+    String director;
 } // OMDBResults
