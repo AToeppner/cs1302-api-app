@@ -131,7 +131,6 @@ public class ApiApp extends Application {
                 runNow(() -> displayCovers());
                 detailInfo(this.res.title);
             } else {
-                this.searchButton.setDisable(false);
                 throw new Exception("No movie found with that title");
             }
         } catch (Exception e) {
